@@ -32,6 +32,13 @@ Same approach as Tracker.gg-style overlays:
 - Native desktop window (no manual browser tab needed)
 - Overlay-style companion mode (`--overlay`) for always-on-top usage
 - Built-in settings panel for region, mock/live mode, and refresh interval
+- EV-based recommendation engine (`PLAY` / `LEAN DODGE` / `DODGE`)
+- Transparent risk breakdown (smurf, role conflict, rank gap, tilt risk)
+- Team composition intelligence and role coverage advice
+- Enemy threat shortlist and personal fatigue insights
+- Local learning loop with recommendation history and outcome logging
+- Setup checker and one-click troubleshooting actions
+- In-app GitHub release update checker
 - Local read-only Riot client integration via `valclient`
 - Mock mode for offline usage and demos
 - In-app troubleshooting panel with guided recovery steps and retry actions

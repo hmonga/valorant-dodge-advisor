@@ -19,9 +19,7 @@
       --wait: #84ace7;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -36,10 +34,10 @@
     }
 
     .wrap {
-      max-width: 1260px;
+      max-width: 1320px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 320px 1fr;
+      grid-template-columns: 330px 1fr;
       gap: 16px;
       animation: reveal .45s ease-out;
     }
@@ -71,31 +69,12 @@
       text-transform: uppercase;
     }
 
-    .sub {
-      margin-top: 4px;
-      font-size: 12px;
-      color: var(--muted);
-    }
+    .sub { margin-top: 4px; font-size: 12px; color: var(--muted); }
+    .line { height: 1px; background: var(--stroke); margin: 12px 0 14px; }
+    .field { margin-bottom: 10px; }
+    .field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
 
-    .line {
-      height: 1px;
-      background: var(--stroke);
-      margin: 12px 0 14px;
-    }
-
-    .field {
-      margin-bottom: 12px;
-    }
-
-    .field label {
-      display: block;
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .field input,
-    .field select {
+    .field input, .field select {
       width: 100%;
       border: 1px solid var(--stroke);
       background: rgba(8, 18, 28, 0.8);
@@ -105,13 +84,7 @@
       outline: none;
     }
 
-    .row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      font-size: 13px;
-    }
+    .row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 13px; }
 
     .badge {
       font-size: 11px;
@@ -131,18 +104,35 @@
       font-weight: 800;
       background: linear-gradient(135deg, #6be2bc, #7bc7ff);
       cursor: pointer;
+      margin-bottom: 8px;
     }
 
-    .status {
-      margin-top: 10px;
+    .btn-secondary {
+      width: 100%;
+      border: 1px solid var(--stroke);
+      border-radius: 10px;
+      padding: 8px;
+      color: #dceff9;
+      background: rgba(106, 198, 234, 0.14);
+      cursor: pointer;
+      margin-bottom: 8px;
       font-size: 12px;
-      color: var(--muted);
-      min-height: 18px;
     }
 
-    .main {
-      padding: 16px;
+    .status { margin-top: 6px; font-size: 12px; color: var(--muted); min-height: 18px; }
+
+    .help-box {
+      margin-top: 12px;
+      border: 1px dashed rgba(153, 195, 219, 0.35);
+      background: rgba(13, 29, 43, 0.58);
+      border-radius: 12px;
+      padding: 10px 12px;
     }
+
+    .help-title { font-size: 12px; text-transform: uppercase; letter-spacing: .7px; color: #b0cde0; margin-bottom: 8px; }
+    .help-list { margin: 0; padding-left: 17px; color: #b9d3e2; font-size: 12px; line-height: 1.45; }
+
+    .main { padding: 16px; }
 
     .verdict {
       border-radius: 14px;
@@ -154,44 +144,19 @@
       border: 1px solid transparent;
     }
 
-    .verdict .call {
-      font-size: 30px;
-      font-weight: 900;
-      letter-spacing: 1px;
-    }
-
-    .verdict .reason {
-      font-size: 13px;
-      color: #d8e8f0;
-      max-width: 650px;
-    }
-
+    .verdict .call { font-size: 30px; font-weight: 900; letter-spacing: 1px; }
+    .verdict .reason { font-size: 13px; color: #d8e8f0; max-width: 660px; }
     .DODGE { background: rgba(75, 17, 27, 0.72); border-color: var(--danger); }
     .LEANDODGE { background: rgba(77, 49, 15, 0.72); border-color: var(--warn); }
     .STAY { background: rgba(15, 54, 37, 0.72); border-color: var(--ok); }
     .WAIT { background: rgba(18, 36, 58, 0.72); border-color: var(--wait); }
 
-    .prob {
-      margin-left: auto;
-      text-align: right;
-    }
-
+    .prob { margin-left: auto; text-align: right; }
     .prob b { font-size: 25px; }
-    .prob .muted { color: var(--muted); font-size: 12px; }
+    .muted { color: var(--muted); font-size: 12px; }
 
-    .teams {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .team h2 {
-      margin: 0 0 9px;
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .8px;
-    }
+    .teams { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .team h2 { margin: 0 0 9px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; }
 
     .card {
       background: rgba(15, 27, 39, 0.84);
@@ -202,12 +167,6 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      transition: transform .12s ease, border-color .12s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-1px);
-      border-color: rgba(174, 214, 232, 0.35);
     }
 
     .card .agent { font-weight: 700; width: 90px; }
@@ -216,70 +175,38 @@
     .smurf { color: var(--danger); font-size: 11px; font-weight: 700; }
     .me { outline: 1px solid #7fb3d2; }
 
-    .muted {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .foot {
+    .meta-grid {
       margin-top: 12px;
-      color: #7f9fb4;
-      font-size: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
 
-    .help-box {
-      margin-top: 12px;
-      border: 1px dashed rgba(153, 195, 219, 0.35);
-      background: rgba(13, 29, 43, 0.58);
-      border-radius: 12px;
-      padding: 10px 12px;
+    .meta-card {
+      background: rgba(15, 27, 39, 0.84);
+      border: 1px solid rgba(169, 205, 223, 0.17);
+      border-radius: 10px;
+      padding: 10px;
     }
 
-    .help-title {
+    .meta-card h3 {
+      margin: 0 0 8px;
       font-size: 12px;
       text-transform: uppercase;
+      color: var(--muted);
       letter-spacing: .7px;
-      color: #b0cde0;
-      margin-bottom: 8px;
     }
 
-    .help-list {
-      margin: 0;
-      padding-left: 17px;
-      color: #b9d3e2;
-      font-size: 12px;
-      line-height: 1.45;
-    }
+    .list { margin: 0; padding-left: 17px; font-size: 12px; color: #d5e7f3; line-height: 1.45; }
+    .risk-row { display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0; }
 
-    .help-actions {
-      margin-top: 9px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    .foot { margin-top: 12px; color: #7f9fb4; font-size: 12px; }
 
-    .btn-mini {
-      border: 1px solid var(--stroke);
-      border-radius: 999px;
-      background: rgba(106, 198, 234, 0.14);
-      color: #dceff9;
-      font-size: 12px;
-      padding: 6px 10px;
-      cursor: pointer;
-    }
-
-    @media (max-width: 940px) {
-      .wrap {
-        grid-template-columns: 1fr;
-      }
-
-      .left {
-        position: static;
-      }
-
-      .teams {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 980px) {
+      .wrap { grid-template-columns: 1fr; }
+      .left { position: static; }
+      .teams { grid-template-columns: 1fr; }
+      .meta-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -287,7 +214,7 @@
   <div class="wrap">
     <aside class="left panel">
       <h1>Valorant Dodge Advisor</h1>
-      <div class="sub">Desktop-ready lobby intelligence</div>
+      <div class="sub">Model-guided pre-match decision engine</div>
       <div class="line"></div>
 
       <div class="field">
@@ -296,27 +223,31 @@
       </div>
 
       <div class="field">
-        <label for="refresh">Refresh Interval (sec)</label>
-        <select id="refresh">
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="5">5</option>
-          <option value="8">8</option>
-          <option value="10">10</option>
+        <label for="queue">Queue Type</label>
+        <select id="queue">
+          <option value="competitive">competitive</option>
+          <option value="premier">premier</option>
+          <option value="unrated">unrated</option>
         </select>
       </div>
 
-      <div class="row">
-        <span>Data source</span>
-        <span class="badge" id="source-badge">Mock</span>
+      <div class="field"><label for="rr-win">RR Gain on Win</label><input id="rr-win" type="number" min="5" max="50" /></div>
+      <div class="field"><label for="rr-loss">RR Loss on Loss</label><input id="rr-loss" type="number" min="5" max="50" /></div>
+      <div class="field"><label for="rr-dodge">RR Dodge Penalty</label><input id="rr-dodge" type="number" min="0" max="10" /></div>
+
+      <div class="field">
+        <label for="refresh">Refresh Interval (sec)</label>
+        <select id="refresh">
+          <option value="2">2</option><option value="3">3</option><option value="5">5</option><option value="8">8</option><option value="10">10</option>
+        </select>
       </div>
 
-      <div class="row">
-        <label for="mock-toggle">Use Mock Data</label>
-        <input id="mock-toggle" type="checkbox" />
-      </div>
+      <div class="row"><span>Data source</span><span class="badge" id="source-badge">Mock</span></div>
+      <div class="row"><label for="mock-toggle">Use Mock Data</label><input id="mock-toggle" type="checkbox" /></div>
 
       <button class="btn" id="save-btn">Save Settings</button>
+      <button class="btn-secondary" id="update-btn">Check for Updates</button>
+      <button class="btn-secondary" id="setup-btn">Run Setup Check</button>
       <div id="settings-status" class="status"></div>
       <div id="help-box" class="help-box" style="display:none"></div>
     </aside>
@@ -336,9 +267,7 @@
       const c = el("div", "card" + (p.is_me ? " me" : ""));
       c.appendChild(el("span", "agent", p.agent));
       c.appendChild(el("span", "rank", p.rank));
-      if (p.smurf && p.smurf.likely_smurf) {
-        c.appendChild(el("span", "smurf", "SMURF " + p.smurf.score + "%"));
-      }
+      if (p.smurf && p.smurf.likely_smurf) c.appendChild(el("span", "smurf", "SMURF " + p.smurf.score + "%"));
       const lvl = p.account_level ? ("lvl " + p.account_level) : "lvl hidden";
       c.appendChild(el("span", "lvl", lvl));
       return c;
@@ -368,7 +297,6 @@
       const help = document.getElementById("help-box");
       help.style.display = "block";
       help.innerHTML = "";
-
       help.appendChild(el("div", "help-title", "Troubleshooting"));
       help.appendChild(el("div", "muted", message || "Live data is not ready yet."));
 
@@ -382,26 +310,15 @@
         help.appendChild(list);
       }
 
-      const actions = el("div", "help-actions");
-      const refresh = el("button", "btn-mini", "Retry Now");
-      refresh.addEventListener("click", () => tick());
-      actions.appendChild(refresh);
-
       if (canFallbackToMock) {
-        const useMock = el("button", "btn-mini", "Use Mock Data");
-        useMock.addEventListener("click", async () => {
+        const fallback = el("button", "btn-secondary", "Use Mock Data");
+        fallback.addEventListener("click", async () => {
           document.getElementById("mock-toggle").checked = true;
-          try {
-            await saveSettings();
-            await tick();
-          } catch {
-            setSettingsStatus("Could not switch to mock mode.", true);
-          }
+          await saveSettings();
+          await tick();
         });
-        actions.appendChild(useMock);
+        help.appendChild(fallback);
       }
-
-      help.appendChild(actions);
     }
 
     async function loadSettings() {
@@ -410,6 +327,10 @@
       document.getElementById("region").value = s.region || "na";
       document.getElementById("mock-toggle").checked = !!s.mock;
       document.getElementById("refresh").value = String(s.refresh_seconds || 5);
+      document.getElementById("queue").value = s.queue_type || "competitive";
+      document.getElementById("rr-win").value = s.rr_gain_on_win ?? 20;
+      document.getElementById("rr-loss").value = s.rr_loss_on_loss ?? 20;
+      document.getElementById("rr-dodge").value = s.dodge_rr_penalty ?? 3;
       document.getElementById("source-badge").textContent = s.mock ? "Mock" : "Live";
       refreshMs = (s.refresh_seconds || 5) * 1000;
     }
@@ -419,6 +340,10 @@
         region: document.getElementById("region").value.trim().toLowerCase(),
         mock: document.getElementById("mock-toggle").checked,
         refresh_seconds: parseInt(document.getElementById("refresh").value, 10),
+        queue_type: document.getElementById("queue").value,
+        rr_gain_on_win: parseInt(document.getElementById("rr-win").value || "20", 10),
+        rr_loss_on_loss: parseInt(document.getElementById("rr-loss").value || "20", 10),
+        dodge_rr_penalty: parseInt(document.getElementById("rr-dodge").value || "3", 10),
       };
       const r = await fetch("/api/settings", {
         method: "POST",
@@ -433,6 +358,99 @@
       timer = setInterval(tick, refreshMs);
       setSettingsStatus("Saved. Settings are active now.");
       setTimeout(() => setSettingsStatus(""), 2200);
+    }
+
+    function renderInsightCards(d) {
+      const meta = el("div", "meta-grid");
+
+      const ev = el("div", "meta-card");
+      ev.appendChild(el("h3", null, "Decision Model"));
+      const dec = d.decision || {};
+      ev.appendChild(el("div", "risk-row", `Recommendation: ${dec.recommendation || "WAIT"}`));
+      ev.appendChild(el("div", "risk-row", `Confidence: ${dec.confidence ?? "-"}`));
+      ev.appendChild(el("div", "risk-row", `Play EV: ${dec.rr_ev_play ?? "-"}`));
+      ev.appendChild(el("div", "risk-row", `Dodge EV: ${dec.rr_ev_dodge ?? "-"}`));
+      const reasons = el("ul", "list");
+      (dec.top_reasons || []).forEach((r) => { const li = document.createElement("li"); li.textContent = r; reasons.appendChild(li); });
+      ev.appendChild(reasons);
+      meta.appendChild(ev);
+
+      const risks = el("div", "meta-card");
+      risks.appendChild(el("h3", null, "Risk Breakdown"));
+      const rk = (dec.key_risks || {});
+      ["smurf_risk", "role_conflict", "rank_gap", "mental_tilt_risk"].forEach((k) => {
+        risks.appendChild(el("div", "risk-row", `${k.replace(/_/g, " ")}: ${rk[k] ?? "-"}`));
+      });
+      meta.appendChild(risks);
+
+      const comp = el("div", "meta-card");
+      comp.appendChild(el("h3", null, "Comp Intelligence"));
+      const tc = d.team_comp || {};
+      comp.appendChild(el("div", "risk-row", `Comp score: ${tc.score ?? "-"}`));
+      comp.appendChild(el("div", "risk-row", `Missing roles: ${(tc.missing_roles || []).join(", ") || "none"}`));
+      const adviceList = el("ul", "list");
+      (d.composition_advice || []).forEach((x) => { const li = document.createElement("li"); li.textContent = x; adviceList.appendChild(li); });
+      comp.appendChild(adviceList);
+      meta.appendChild(comp);
+
+      const threats = el("div", "meta-card");
+      threats.appendChild(el("h3", null, "Top Enemy Threats"));
+      const threatList = el("ul", "list");
+      (d.enemy_threats || []).forEach((t) => {
+        const li = document.createElement("li");
+        li.textContent = `${t.agent || "?"} (${t.rank || "?"}) threat ${t.threat_score}`;
+        threatList.appendChild(li);
+      });
+      threats.appendChild(threatList);
+      meta.appendChild(threats);
+
+      const personal = el("div", "meta-card");
+      personal.appendChild(el("h3", null, "Personal Insights"));
+      const pi = d.personal_insights || {};
+      personal.appendChild(el("div", "risk-row", `Fatigue index: ${pi.fatigue_index ?? "-"}`));
+      personal.appendChild(el("div", "risk-row", `Avg confidence: ${pi.avg_confidence ?? "-"}`));
+      personal.appendChild(el("div", "risk-row", `Play rate: ${pi.play_rate ?? "-"}`));
+      personal.appendChild(el("div", "risk-row", `Samples: ${pi.recent_samples ?? "-"}`));
+
+      const winBtn = el("button", "btn-secondary", "Log Last Match as Win");
+      winBtn.addEventListener("click", async () => {
+        await fetch("/api/outcome", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ result: "win" }) });
+        setSettingsStatus("Logged match outcome: win");
+      });
+      const lossBtn = el("button", "btn-secondary", "Log Last Match as Loss");
+      lossBtn.addEventListener("click", async () => {
+        await fetch("/api/outcome", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ result: "loss" }) });
+        setSettingsStatus("Logged match outcome: loss");
+      });
+      personal.appendChild(winBtn);
+      personal.appendChild(lossBtn);
+      meta.appendChild(personal);
+
+      return meta;
+    }
+
+    async function checkUpdates() {
+      const r = await fetch("/api/update-check");
+      const d = await r.json();
+      if (!d.ok) {
+        setSettingsStatus("Update check unavailable right now.", true);
+        return;
+      }
+      if (d.update_available) {
+        setSettingsStatus(`Update available: ${d.latest_version}`);
+        if (d.release_url) window.open(d.release_url, "_blank");
+      } else {
+        setSettingsStatus("You are on the latest version.");
+      }
+    }
+
+    async function runSetupCheck() {
+      const r = await fetch("/api/setup-check");
+      const d = await r.json();
+      const msg = d.ok ? "Setup check passed." : "Setup check found issues.";
+      const tips = (d.checks || []).filter((c) => !c.ok).map((c) => `${c.name}: ${c.message}`);
+      showHelp(msg, tips.length ? tips : ["Everything looks good."], false);
+      setSettingsStatus(msg, !d.ok);
     }
 
     async function tick() {
@@ -451,8 +469,8 @@
         }
 
         hideHelp();
-
         app.innerHTML = "";
+
         const v = d.verdict || {};
         const cls = (v.call || "WAIT").replace(/\s+/g, "");
         const banner = el("div", "verdict " + cls);
@@ -476,6 +494,7 @@
         teams.appendChild(teamCol("Enemy team", d.enemies || []));
         app.appendChild(teams);
 
+        app.appendChild(renderInsightCards(d));
         foot.textContent = `state: ${d.state} · ${d.win_prob_basis || ""} · enemy smurfs: ${d.counts?.enemy_smurfs ?? 0}`;
       } catch (e) {
         app.innerHTML = '<p class="muted">Backend not reachable.</p>';
@@ -484,19 +503,17 @@
     }
 
     document.getElementById("save-btn").addEventListener("click", async () => {
-      try {
-        await saveSettings();
-      } catch {
-        setSettingsStatus("Could not save settings.", true);
-      }
+      try { await saveSettings(); } catch { setSettingsStatus("Could not save settings.", true); }
+    });
+    document.getElementById("update-btn").addEventListener("click", async () => {
+      try { await checkUpdates(); } catch { setSettingsStatus("Update check failed.", true); }
+    });
+    document.getElementById("setup-btn").addEventListener("click", async () => {
+      try { await runSetupCheck(); } catch { setSettingsStatus("Setup check failed.", true); }
     });
 
     (async function init() {
-      try {
-        await loadSettings();
-      } catch {
-        setSettingsStatus("Using defaults (settings unavailable).", true);
-      }
+      try { await loadSettings(); } catch { setSettingsStatus("Using defaults (settings unavailable).", true); }
       await tick();
       timer = setInterval(tick, refreshMs);
     })();

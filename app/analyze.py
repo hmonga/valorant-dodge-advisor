@@ -5,9 +5,13 @@
 import copy
 
 from . import config, stats, winprob
+from .decision import build_decision
+from .history import append_snapshot, summarize_recent
 from .lobby import fetch_normalized
 from .ranks import rank_name
 from .riot_client import get_client, reset_client
+from .roles import analyze_team_comp
+from .settings_store import load_settings
 from .smurf import smurf_score
 
 
@@ -36,26 +40,52 @@ def _troubleshooting(code):
     return common
 
 
-def _verdict(state, win_prob, enemy_smurfs):
-    if state == "pregame":
-        return {
-            "call": "WAIT",
-            "reason": "Agent select — enemies are hidden. Verdict updates at load-in.",
-        }
-    if win_prob is None:
-        return {"call": "WAIT", "reason": "Not enough info yet."}
+def _verdict_from_decision(decision, win_prob):
+    rec = decision.get("recommendation")
+    call = {
+        "DODGE": "DODGE",
+        "LEAN_DODGE": "LEAN DODGE",
+        "PLAY": "STAY",
+        "WAIT": "WAIT",
+    }.get(rec, "WAIT")
 
-    if win_prob < 0.42:
-        reason = f"Low win chance ({round(win_prob * 100)}%)."
-        if enemy_smurfs:
-            reason += f" {enemy_smurfs} likely smurf(s) on enemy team."
-        return {"call": "DODGE", "reason": reason}
-    if win_prob < 0.50:
-        return {
-            "call": "LEAN DODGE",
-            "reason": f"Slightly unfavorable ({round(win_prob * 100)}%).",
-        }
-    return {"call": "STAY", "reason": f"Favorable ({round(win_prob * 100)}%)."}
+    if rec == "WAIT":
+        reason = "Waiting for enough live data to finalize recommendation."
+    elif win_prob is None:
+        reason = decision.get("dodge_ev_summary", "Decision built from partial data.")
+    else:
+        reason = f"{decision.get('dodge_ev_summary', '')} (win {round(win_prob * 100)}%)"
+
+    return {"call": call, "reason": reason}
+
+
+def _enemy_threats(enemies):
+    ranked = []
+    for p in enemies:
+        form = p.get("form") or {}
+        score = (p.get("tier", 0) * 1.5) + ((p.get("smurf") or {}).get("score", 0) * 0.8) + (form.get("winrate", 0.5) * 35)
+        ranked.append({
+            "agent": p.get("agent"),
+            "rank": p.get("rank"),
+            "smurf_score": (p.get("smurf") or {}).get("score", 0),
+            "recent_winrate": form.get("winrate"),
+            "threat_score": round(score, 1),
+        })
+    return sorted(ranked, key=lambda x: x["threat_score"], reverse=True)[:3]
+
+
+def _composition_advice(team_comp):
+    out = []
+    missing = team_comp.get("missing_roles", [])
+    if "controller" in missing:
+        out.append("Add a controller for smoke coverage.")
+    if "initiator" in missing:
+        out.append("Add an initiator for info and entry support.")
+    if "sentinel" in missing:
+        out.append("Add a sentinel for flank control and site anchor.")
+    if team_comp.get("duelist_overload", 0) > 0:
+        out.append("Too many duelists; swap one into utility role.")
+    return out[:3]
 
 
 def _enrich(players, client):
@@ -72,6 +102,9 @@ def _enrich(players, client):
 
 
 def analyze():
+    settings = load_settings()
+    recent_summary = summarize_recent()
+
     if config.MOCK:
         from .mock import MOCK_LOBBY
 
@@ -118,16 +151,46 @@ def analyze():
     enemies = [p for p in players if p["team"] == "enemy"]
 
     prob = winprob.estimate(allies, enemies)
+    team_comp = analyze_team_comp(allies)
+    decision = build_decision(
+        state=lobby["state"],
+        win_prob=prob["win_prob"],
+        allies=allies,
+        enemies=enemies,
+        team_comp=team_comp,
+        settings=settings,
+        recent_summary=recent_summary,
+    )
+
     enemy_smurfs = sum(1 for p in enemies if p["smurf"]["likely_smurf"])
     ally_smurfs = sum(1 for p in allies if p["smurf"]["likely_smurf"])
 
-    return {
+    payload = {
         "state": lobby["state"],
         "mode": "mock" if config.MOCK else "live",
         "win_prob": prob["win_prob"],
         "win_prob_basis": prob["basis"],
-        "verdict": _verdict(lobby["state"], prob["win_prob"], enemy_smurfs),
+        "verdict": _verdict_from_decision(decision, prob["win_prob"]),
+        "decision": decision,
+        "team_comp": team_comp,
+        "composition_advice": _composition_advice(team_comp),
+        "enemy_threats": _enemy_threats(enemies),
+        "personal_insights": {
+            "fatigue_index": recent_summary.get("fatigue_index", 0),
+            "recent_samples": recent_summary.get("samples", 0),
+            "avg_confidence": recent_summary.get("avg_confidence", 0),
+            "play_rate": recent_summary.get("play_rate", 0.0),
+        },
+        "settings_used": {
+            "queue_type": settings.get("queue_type"),
+            "rr_gain_on_win": settings.get("rr_gain_on_win"),
+            "rr_loss_on_loss": settings.get("rr_loss_on_loss"),
+            "dodge_rr_penalty": settings.get("dodge_rr_penalty"),
+        },
         "counts": {"enemy_smurfs": enemy_smurfs, "ally_smurfs": ally_smurfs},
         "allies": allies,
         "enemies": enemies,
     }
+
+    append_snapshot(payload)
+    return payload
