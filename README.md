@@ -69,6 +69,9 @@ Launch Valorant, then in app settings:
 - disable `Use Mock Data`
 - set your region (`na`, `eu`, `ap`, `kr`, etc.)
 
+Startup order does not matter: you can open the app first or launch Valorant first.
+The app auto-detects when the game client becomes available.
+
 The verdict fills in with real win % once you load into the map (enemies are hidden
 during agent select).
 

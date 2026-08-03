@@ -7,7 +7,7 @@ import copy
 from . import config, stats, winprob
 from .lobby import fetch_normalized
 from .ranks import rank_name
-from .riot_client import get_client
+from .riot_client import get_client, reset_client
 from .smurf import smurf_score
 
 
@@ -58,7 +58,14 @@ def analyze():
             return {"state": "no_game", "message": "Valorant isn't running (or client not found)."}
         lobby = fetch_normalized(client)
         if lobby is None:
-            return {"state": "no_match", "message": "Not in agent select or a match right now."}
+            # Auto-recover if the cached local client became stale after game restarts.
+            reset_client()
+            client = get_client()
+            if client is None:
+                return {"state": "no_game", "message": "Valorant isn't running (or client not found)."}
+            lobby = fetch_normalized(client)
+            if lobby is None:
+                return {"state": "no_match", "message": "Not in agent select or a match right now."}
 
     players = _enrich(lobby["players"], client)
     allies = [p for p in players if p["team"] == "ally"]
