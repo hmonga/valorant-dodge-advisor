@@ -62,10 +62,27 @@
       top: 18px;
     }
 
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+
+    .brand-logo {
+      width: 84px;
+      height: 84px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 70, 97, 0.52);
+      box-shadow: 0 8px 24px rgba(147, 14, 37, 0.45);
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+
     h1 {
       margin: 0;
-      font-size: 18px;
-      letter-spacing: 0.9px;
+      font-size: 17px;
+      letter-spacing: 1px;
       text-transform: uppercase;
     }
 
@@ -213,8 +230,9 @@
 <body>
   <div class="wrap">
     <aside class="left panel">
-      <h1>Valorant Dodge Advisor</h1>
-      <div class="sub">Model-guided pre-match decision engine</div>
+      <div class="brand">
+        <img class="brand-logo" src="/rr-saviour.svg" alt="RR Saviour logo" />
+      </div>
       <div class="line"></div>
 
       <div class="field">

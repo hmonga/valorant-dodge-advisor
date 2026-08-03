@@ -1,0 +1,20 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="24" y1="24" x2="488" y2="488" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B0B0B"/>
+      <stop offset="1" stop-color="#1A0D0F"/>
+    </linearGradient>
+    <linearGradient id="red" x1="90" y1="92" x2="421" y2="361" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF2F45"/>
+      <stop offset="1" stop-color="#B2001B"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="url(#bg)"/>
+  <rect x="24" y="24" width="464" height="464" rx="112" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="8"/>
+
+  <g font-family="Avenir Next, Segoe UI, Arial, sans-serif" font-weight="900" text-anchor="middle">
+    <text x="256" y="248" fill="url(#red)" font-size="188" letter-spacing="8">RR</text>
+    <text x="256" y="338" fill="#F1F1F1" font-size="58" letter-spacing="3">Saviour</text>
+  </g>
+</svg>
