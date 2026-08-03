@@ -227,6 +227,47 @@
       font-size: 12px;
     }
 
+    .help-box {
+      margin-top: 12px;
+      border: 1px dashed rgba(153, 195, 219, 0.35);
+      background: rgba(13, 29, 43, 0.58);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .help-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      color: #b0cde0;
+      margin-bottom: 8px;
+    }
+
+    .help-list {
+      margin: 0;
+      padding-left: 17px;
+      color: #b9d3e2;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .help-actions {
+      margin-top: 9px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-mini {
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      background: rgba(106, 198, 234, 0.14);
+      color: #dceff9;
+      font-size: 12px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
     @media (max-width: 940px) {
       .wrap {
         grid-template-columns: 1fr;
@@ -277,6 +318,7 @@
 
       <button class="btn" id="save-btn">Save Settings</button>
       <div id="settings-status" class="status"></div>
+      <div id="help-box" class="help-box" style="display:none"></div>
     </aside>
 
     <main class="main panel">
@@ -314,6 +356,52 @@
       const status = document.getElementById("settings-status");
       status.style.color = isError ? "#ff9dac" : "#8eb2c6";
       status.textContent = msg;
+    }
+
+    function hideHelp() {
+      const help = document.getElementById("help-box");
+      help.style.display = "none";
+      help.innerHTML = "";
+    }
+
+    function showHelp(message, tips, canFallbackToMock) {
+      const help = document.getElementById("help-box");
+      help.style.display = "block";
+      help.innerHTML = "";
+
+      help.appendChild(el("div", "help-title", "Troubleshooting"));
+      help.appendChild(el("div", "muted", message || "Live data is not ready yet."));
+
+      if (tips && tips.length) {
+        const list = el("ul", "help-list");
+        tips.forEach((tip) => {
+          const li = document.createElement("li");
+          li.textContent = tip;
+          list.appendChild(li);
+        });
+        help.appendChild(list);
+      }
+
+      const actions = el("div", "help-actions");
+      const refresh = el("button", "btn-mini", "Retry Now");
+      refresh.addEventListener("click", () => tick());
+      actions.appendChild(refresh);
+
+      if (canFallbackToMock) {
+        const useMock = el("button", "btn-mini", "Use Mock Data");
+        useMock.addEventListener("click", async () => {
+          document.getElementById("mock-toggle").checked = true;
+          try {
+            await saveSettings();
+            await tick();
+          } catch {
+            setSettingsStatus("Could not switch to mock mode.", true);
+          }
+        });
+        actions.appendChild(useMock);
+      }
+
+      help.appendChild(actions);
     }
 
     async function loadSettings() {
@@ -357,9 +445,12 @@
         if (d.state === "no_game" || d.state === "no_match") {
           app.innerHTML = "";
           app.appendChild(el("p", "muted", d.message || "Waiting for a lobby..."));
+          showHelp(d.message, d.troubleshooting || [], d.mode === "live");
           foot.textContent = "";
           return;
         }
+
+        hideHelp();
 
         app.innerHTML = "";
         const v = d.verdict || {};
@@ -388,6 +479,7 @@
         foot.textContent = `state: ${d.state} · ${d.win_prob_basis || ""} · enemy smurfs: ${d.counts?.enemy_smurfs ?? 0}`;
       } catch (e) {
         app.innerHTML = '<p class="muted">Backend not reachable.</p>';
+        showHelp("The app backend is not reachable.", ["Close and reopen the app."], false);
       }
     }
 

@@ -34,6 +34,7 @@ Same approach as Tracker.gg-style overlays:
 - Built-in settings panel for region, mock/live mode, and refresh interval
 - Local read-only Riot client integration via `valclient`
 - Mock mode for offline usage and demos
+- In-app troubleshooting panel with guided recovery steps and retry actions
 
 ## Quick Start (Desktop)
 

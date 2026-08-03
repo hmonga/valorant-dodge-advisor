@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 from . import config
 from .analyze import analyze
+from .riot_client import get_client_status
 from .settings_store import load_settings, save_settings, settings_path
 
 app = FastAPI(title="Valorant Dodge Advisor")
@@ -32,6 +33,7 @@ def api_health():
         "mock": config.MOCK,
         "region": config.REGION,
         "settings_path": settings_path(),
+        "client_status": get_client_status(),
     }
 
 
