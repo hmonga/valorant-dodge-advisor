@@ -1,9 +1,9 @@
 # Copilot Handoff Context (Valorant Dodge Advisor)
 
-Last updated: 2026-08-03
-Repository: https://github.com/hmonga/valorant-dodge-advisor
-Current branch: main
-Latest commit: 3ed59d8
+Last updated: 2026-08-03  
+Repository: [hmonga/valorant-dodge-advisor](https://github.com/hmonga/valorant-dodge-advisor)  
+Current branch: main  
+Latest commit: 0aa974a
 
 ## How to use this file in your next Copilot chat
 
@@ -16,6 +16,7 @@ Paste this at the start of a new chat:
 This project is a desktop-first Valorant pre-game decision app that helps users decide whether to play or dodge using live lobby data.
 
 Primary UX goals:
+
 - One-click install experience via GitHub Releases
 - Open app and use immediately
 - Startup order should not matter (app first or Valorant first)
@@ -25,6 +26,7 @@ Primary UX goals:
 ## Current app status
 
 Implemented and shipped:
+
 - Native desktop launcher using local FastAPI backend + pywebview
 - Overlay-style companion window mode
 - Persistent settings (region, mock/live, refresh interval, queue + RR economics)
@@ -42,6 +44,7 @@ Implemented and shipped:
 ## Key architecture
 
 Backend:
+
 - app/server.py: API surface and HTML serving
 - app/analyze.py: Orchestration and payload shaping
 - app/riot_client.py: valclient wrapper, status classification, reconnect support
@@ -54,15 +57,18 @@ Backend:
 - app/smurf.py: Smurf risk heuristic
 
 Frontend:
+
 - web/index.html: Single-page desktop UI with settings, diagnostics, EV/risk panels, comp intelligence, threat panel, and outcome logging buttons
 - web/rr-saviour.svg: Current brand mark (RR + Saviour only)
 
 Desktop/runtime:
+
 - run_desktop.py: main desktop entrypoint
 - app/desktop.py: starts server and opens desktop window
 - desktop.spec: PyInstaller spec
 
 Release/build:
+
 - scripts/build_macos.sh: local macOS build + DMG output
 - scripts/build_windows.ps1: local Windows executable build
 - installer/windows.iss: Windows installer definition
@@ -87,6 +93,7 @@ Release/build:
 settings file path: ~/.valorant-dodge-advisor/settings.json
 
 Current keys:
+
 - region
 - mock
 - refresh_seconds
@@ -101,12 +108,14 @@ Current keys:
 ## Current recommendation behavior
 
 Recommendation values:
+
 - PLAY
 - LEAN_DODGE
 - DODGE
 - WAIT
 
 Decision factors currently used:
+
 - win probability
 - RR economics (gain/loss/dodge penalty)
 - smurf risk differential
@@ -118,12 +127,14 @@ Decision factors currently used:
 ## Installer and release flow (user-facing)
 
 User path:
+
 1. Open Releases page
-2. Download installer
-3. Install
-4. Launch app
+1. Download installer
+1. Install
+1. Launch app
 
 Direct links expected in README:
+
 - Windows: releases/latest/download/ValorantDodgeAdvisor-Setup.exe
 - macOS: releases/latest/download/ValorantDodgeAdvisor.dmg
 
@@ -136,18 +147,22 @@ Direct links expected in README:
 
 ## High-priority next improvements
 
-1) Stabilize branding and UI consistency
+1. Stabilize branding and UI consistency
+
 - Ensure logo renders crisply at all scales and dark/light backgrounds if themes are introduced.
 
-2) Strengthen data quality and calibration
+1. Strengthen data quality and calibration
+
 - Build offline calibration script from history + outcome logs.
 - Add confidence calibration metrics and drift warnings.
 
-3) Improve supportability
+1. Improve supportability
+
 - Add export diagnostics bundle button (health + settings + recent non-sensitive logs).
 - Add clearer error categories in UI badges.
 
-4) Improve release quality
+1. Improve release quality
+
 - Add version injection at build time and display in UI.
 - Add code signing + notarization workflow notes for production release.
 
@@ -166,7 +181,8 @@ Direct links expected in README:
 ## If you are the next Copilot instance
 
 Do this first:
+
 1. Read this file fully.
-2. Read README.md.
-3. Inspect app/analyze.py and web/index.html before proposing architecture changes.
-4. Preserve release workflow and existing endpoint contracts unless change is explicitly requested.
+1. Read README.md.
+1. Inspect app/analyze.py and web/index.html before proposing architecture changes.
+1. Preserve release workflow and existing endpoint contracts unless change is explicitly requested.
