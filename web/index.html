@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valorant Dodge Advisor</title>
+  <style>
+    :root {
+      --bg0: #07121e;
+      --bg1: #0f2334;
+      --bg2: #122b3f;
+      --panel: rgba(8, 17, 26, 0.78);
+      --stroke: rgba(164, 200, 219, 0.2);
+      --txt: #e6f2f8;
+      --muted: #8eb2c6;
+      --danger: #ff6a81;
+      --warn: #f8c66d;
+      --ok: #61e0a6;
+      --wait: #84ace7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--txt);
+      background:
+        radial-gradient(1100px 500px at -15% -10%, #1f4f74 0%, transparent 55%),
+        radial-gradient(900px 550px at 110% -15%, #12495d 0%, transparent 52%),
+        linear-gradient(145deg, var(--bg0), var(--bg1) 48%, var(--bg2));
+      min-height: 100vh;
+      padding: 18px;
+    }
+
+    .wrap {
+      max-width: 1260px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 16px;
+      animation: reveal .45s ease-out;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      backdrop-filter: blur(7px);
+      box-shadow: 0 8px 38px rgba(0, 0, 0, 0.33);
+    }
+
+    .left {
+      padding: 16px;
+      align-self: start;
+      position: sticky;
+      top: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+    }
+
+    .sub {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .line {
+      height: 1px;
+      background: var(--stroke);
+      margin: 12px 0 14px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      border: 1px solid var(--stroke);
+      background: rgba(8, 18, 28, 0.8);
+      color: var(--txt);
+      border-radius: 10px;
+      padding: 9px 10px;
+      outline: none;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    .badge {
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 4px 8px;
+      border: 1px solid var(--stroke);
+      color: #d6e8f4;
+      background: rgba(120, 171, 205, 0.16);
+    }
+
+    .btn {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px;
+      color: #03131d;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6be2bc, #7bc7ff);
+      cursor: pointer;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      min-height: 18px;
+    }
+
+    .main {
+      padding: 16px;
+    }
+
+    .verdict {
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border: 1px solid transparent;
+    }
+
+    .verdict .call {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .verdict .reason {
+      font-size: 13px;
+      color: #d8e8f0;
+      max-width: 650px;
+    }
+
+    .DODGE { background: rgba(75, 17, 27, 0.72); border-color: var(--danger); }
+    .LEANDODGE { background: rgba(77, 49, 15, 0.72); border-color: var(--warn); }
+    .STAY { background: rgba(15, 54, 37, 0.72); border-color: var(--ok); }
+    .WAIT { background: rgba(18, 36, 58, 0.72); border-color: var(--wait); }
+
+    .prob {
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .prob b { font-size: 25px; }
+    .prob .muted { color: var(--muted); font-size: 12px; }
+
+    .teams {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .team h2 {
+      margin: 0 0 9px;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .card {
+      background: rgba(15, 27, 39, 0.84);
+      border: 1px solid rgba(169, 205, 223, 0.17);
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform .12s ease, border-color .12s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-1px);
+      border-color: rgba(174, 214, 232, 0.35);
+    }
+
+    .card .agent { font-weight: 700; width: 90px; }
+    .card .rank { font-size: 12px; color: var(--muted); width: 90px; }
+    .card .lvl { font-size: 11px; color: #7899ae; margin-left: auto; }
+    .smurf { color: var(--danger); font-size: 11px; font-weight: 700; }
+    .me { outline: 1px solid #7fb3d2; }
+
+    .muted {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .foot {
+      margin-top: 12px;
+      color: #7f9fb4;
+      font-size: 12px;
+    }
+
+    @media (max-width: 940px) {
+      .wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .left {
+        position: static;
+      }
+
+      .teams {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <aside class="left panel">
+      <h1>Valorant Dodge Advisor</h1>
+      <div class="sub">Desktop-ready lobby intelligence</div>
+      <div class="line"></div>
+
+      <div class="field">
+        <label for="region">Region</label>
+        <input id="region" placeholder="na / eu / ap / kr" />
+      </div>
+
+      <div class="field">
+        <label for="refresh">Refresh Interval (sec)</label>
+        <select id="refresh">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="8">8</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <span>Data source</span>
+        <span class="badge" id="source-badge">Mock</span>
+      </div>
+
+      <div class="row">
+        <label for="mock-toggle">Use Mock Data</label>
+        <input id="mock-toggle" type="checkbox" />
+      </div>
+
+      <button class="btn" id="save-btn">Save Settings</button>
+      <div id="settings-status" class="status"></div>
+    </aside>
+
+    <main class="main panel">
+      <div id="app"><p class="muted">Loading...</p></div>
+      <div class="foot" id="foot"></div>
+    </main>
+  </div>
+
+  <script>
+    const el = (t, c, txt) => { const e = document.createElement(t); if (c) e.className = c; if (txt != null) e.textContent = txt; return e; };
+    let refreshMs = 5000;
+    let timer = null;
+
+    function card(p) {
+      const c = el("div", "card" + (p.is_me ? " me" : ""));
+      c.appendChild(el("span", "agent", p.agent));
+      c.appendChild(el("span", "rank", p.rank));
+      if (p.smurf && p.smurf.likely_smurf) {
+        c.appendChild(el("span", "smurf", "SMURF " + p.smurf.score + "%"));
+      }
+      const lvl = p.account_level ? ("lvl " + p.account_level) : "lvl hidden";
+      c.appendChild(el("span", "lvl", lvl));
+      return c;
+    }
+
+    function teamCol(title, players) {
+      const wrap = el("div", "team");
+      wrap.appendChild(el("h2", null, title));
+      if (!players.length) wrap.appendChild(el("p", "muted", "hidden"));
+      players.forEach(p => wrap.appendChild(card(p)));
+      return wrap;
+    }
+
+    function setSettingsStatus(msg, isError = false) {
+      const status = document.getElementById("settings-status");
+      status.style.color = isError ? "#ff9dac" : "#8eb2c6";
+      status.textContent = msg;
+    }
+
+    async function loadSettings() {
+      const r = await fetch("/api/settings");
+      const s = await r.json();
+      document.getElementById("region").value = s.region || "na";
+      document.getElementById("mock-toggle").checked = !!s.mock;
+      document.getElementById("refresh").value = String(s.refresh_seconds || 5);
+      document.getElementById("source-badge").textContent = s.mock ? "Mock" : "Live";
+      refreshMs = (s.refresh_seconds || 5) * 1000;
+    }
+
+    async function saveSettings() {
+      const payload = {
+        region: document.getElementById("region").value.trim().toLowerCase(),
+        mock: document.getElementById("mock-toggle").checked,
+        refresh_seconds: parseInt(document.getElementById("refresh").value, 10),
+      };
+      const r = await fetch("/api/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!r.ok) throw new Error("save failed");
+      const s = await r.json();
+      document.getElementById("source-badge").textContent = s.mock ? "Mock" : "Live";
+      refreshMs = (s.refresh_seconds || 5) * 1000;
+      if (timer) clearInterval(timer);
+      timer = setInterval(tick, refreshMs);
+      setSettingsStatus("Saved. Settings are active now.");
+      setTimeout(() => setSettingsStatus(""), 2200);
+    }
+
+    async function tick() {
+      const app = document.getElementById("app");
+      const foot = document.getElementById("foot");
+      try {
+        const r = await fetch("/api/analyze");
+        const d = await r.json();
+
+        if (d.state === "no_game" || d.state === "no_match") {
+          app.innerHTML = "";
+          app.appendChild(el("p", "muted", d.message || "Waiting for a lobby..."));
+          foot.textContent = "";
+          return;
+        }
+
+        app.innerHTML = "";
+        const v = d.verdict || {};
+        const cls = (v.call || "WAIT").replace(/\s+/g, "");
+        const banner = el("div", "verdict " + cls);
+        const left = el("div");
+        left.appendChild(el("div", "call", v.call || "-"));
+        left.appendChild(el("div", "reason", v.reason || ""));
+        banner.appendChild(left);
+
+        const prob = el("div", "prob");
+        if (d.win_prob != null) {
+          prob.appendChild(el("b", null, Math.round(d.win_prob * 100) + "%"));
+          prob.appendChild(el("div", "muted", "win chance"));
+        } else {
+          prob.appendChild(el("div", "muted", "win % at load-in"));
+        }
+        banner.appendChild(prob);
+        app.appendChild(banner);
+
+        const teams = el("div", "teams");
+        teams.appendChild(teamCol("Your team", d.allies || []));
+        teams.appendChild(teamCol("Enemy team", d.enemies || []));
+        app.appendChild(teams);
+
+        foot.textContent = `state: ${d.state} · ${d.win_prob_basis || ""} · enemy smurfs: ${d.counts?.enemy_smurfs ?? 0}`;
+      } catch (e) {
+        app.innerHTML = '<p class="muted">Backend not reachable.</p>';
+      }
+    }
+
+    document.getElementById("save-btn").addEventListener("click", async () => {
+      try {
+        await saveSettings();
+      } catch {
+        setSettingsStatus("Could not save settings.", true);
+      }
+    });
+
+    (async function init() {
+      try {
+        await loadSettings();
+      } catch {
+        setSettingsStatus("Using defaults (settings unavailable).", true);
+      }
+      await tick();
+      timer = setInterval(tick, refreshMs);
+    })();
+  </script>
+</body>
+</html>
